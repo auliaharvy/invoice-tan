@@ -12,7 +12,7 @@ class ClientsController extends Controller
      */
     public function index()
     {
-        $title = 'Klien';
+        $title = 'Clients';
         $data = clients::all();
         return view('clients.index', compact('data', 'title'));
     }
