@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -11,7 +12,9 @@ class UsersController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Users';
+        $listData = User::all();
+        return view('users.index', compact('title', 'listData'));
     }
 
     /**
@@ -19,7 +22,8 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Users';
+        return view('users.create', compact('title'));
     }
 
     /**
@@ -27,7 +31,18 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+        ]);
+
+        // Simpan data ke dalam database
+        User::create($request->all());
+
+        // Redirect ke halaman index dengan pesan sukses
+        return redirect()->route('users.index')->with('success', 'Data berhasil ditambahkan');
     }
 
     /**
@@ -35,7 +50,7 @@ class UsersController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -43,7 +58,10 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $title = 'Users';
+        $data = User::find($id);
+
+        return view('users.edit', compact('data','title'));
     }
 
     /**
@@ -51,7 +69,35 @@ class UsersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        if ($request->password) {
+            // validasi data
+            $request->validate([
+                'name' => 'required',
+                'email' =>'required | email',
+                'password' =>'required|min:6',
+            ]);
+
+            // Simpan data ke dalam database
+            User::find($id)->update($request->all());
+        } else {
+            // validasi data
+            $request->validate([
+                'name' =>'required',
+                'email' =>'required | email',
+            ]);
+
+            // Simpan data ke dalam database
+            User::find($id)->update([
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
+        }
+
+
+
+        // Redirect ke halaman index dengan pesan sukses
+        return redirect()->route('users.index')->with('success', 'Data berhasil diubah');
     }
 
     /**

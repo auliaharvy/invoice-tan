@@ -2,15 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientsController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\InvoicesController;
 
-// Invoice Routes
-Route::get('/', [App\Http\Controllers\InvoiceController::class, 'index'])->name('invoices.index');
+// Dashboard Routes
+Route::get('/', [ClientsController::class, 'index'])->name('invoices.index');
 
-// Invoice Routes
-Route::resource('invoices', InvoiceController::class);
 // User Routes
-Route::resource('users', UserController::class);
+Route::resource('users', UsersController::class);
+
 // Client Routes
 Route::resource('clients', ClientsController::class);
+
+// Invoices Routes
+Route::resource('invoices', InvoicesController::class);
